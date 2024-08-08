@@ -1,10 +1,16 @@
-import { getMeal } from '@/lib/meals'
-import classes from './page.module.css'
-import Image from 'next/image'
+import { getMeal } from '@/lib/meals';
+import classes from './page.module.css';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 export default function MealsDetailPage({params}){
 
     const meals = getMeal(params.slug);
+
+    if(!meals){
+        notFound();
+    }
+
     meals.instructions = meals.instructions.replace(/\n/g, '<br />')
 
     return(
