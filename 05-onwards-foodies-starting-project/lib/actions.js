@@ -1,6 +1,13 @@
 'use server';
 
-export async function shareMeal(formData){
+import { redirect } from "next/navigation";
+import { saveMeal } from "./meals";
+
+function isInvalidText(text){
+    return !text || text.trim() === '';
+}
+
+export async function shareMeal(prevState,formData){
     const meal = {
         title: formData.get('title'),
         summary: formData.get('summary'),
@@ -10,5 +17,21 @@ export async function shareMeal(formData){
         creator_email: formData.get('email')
     }
 
-    // console.log(meal);
+    if(
+        isInvalidText(meal.creator) || 
+        isInvalidText(meal.creator_email) ||  
+        isInvalidText(meal.instructions) || 
+        isInvalidText(meal.summary) || 
+        isInvalidText(meal.title) ||
+        !meal.creator_email.includes('@') ||
+        !meal.image || meal.image.size === 0
+    ) {
+        return{
+            message: 'Invalid Input!'
+        }
+    }
+
+    await saveMeal(meal);
+    revalidatePath('/meals')
+    redirect('/meals');
 }
