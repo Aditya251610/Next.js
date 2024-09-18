@@ -5,6 +5,11 @@ import { getMeals } from '@/lib/meals';
 import { Suspense } from 'react';
 import Loading from './loading';
 
+export const metadata = {
+    title: 'All meals',
+    description: 'Browse the delicious meals shared by our vibrant community.'
+}
+
 async function MealLoader(){
     const meal = await getMeals();
     return(
